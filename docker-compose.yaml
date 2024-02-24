@@ -5,12 +5,13 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8888:8888"
+      - "8000:8000"
     volumes:
       - .:/app
     depends_on:
         - db
-
+    networks:
+      - ulrichNetwork
   db:
     image: mysql
     restart: always
@@ -23,6 +24,8 @@ services:
       - "33066:3306"
     volumes:
       - .dbdata:/var/lib/mysql
+    networks:
+      - ulrichNetwork
   phpmyadmin:
     depends_on:
       - db
@@ -33,3 +36,7 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
+networks:
+  default:
+    external:
+      name: ulrichNetwork
